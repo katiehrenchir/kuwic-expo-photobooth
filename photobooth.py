@@ -1,5 +1,5 @@
 from picamera import PiCamera
-from PIL import Image, ImageDraw, ImageFont
+#from PIL import Image, ImageDraw, ImageFont
 from time import sleep
 import subprocess
 
@@ -7,34 +7,22 @@ camera = PiCamera()
 camera.rotation = 180
 camera.resolution = (800, 800)
 
-ffmpeg_command = "ffmpeg -framerate 5 -f image2 -i /home/pi/Desktop/kuwic-expo-photobooth/tmp/image%03d.jpg /home/pi/Desktop/kuwic-expo-photobooth/dest/$(date +\"%Y_%m_%d_%I_%M_%p\")_KUWIC_PhotoBooth.gif"
+ffmpeg_command = "ffmpeg -framerate 3 -f image2 -i /home/pi/Desktop/kuwic-expo-photobooth/tmp/image%03d.jpg /home/pi/Desktop/kuwic-expo-photobooth/dest/$(date +\"%Y_%m_%d_%I_%M_%p\")_KUWIC_PhotoBooth.gif"
 clear_dir_command = "rm -r /home/pi/Desktop/kuwic-expo-photobooth/tmp/*"
-
-    
-def countdown():
-    #Display 3
-    sleep(1)
-    #Display 2
-    sleep(1)
-    #Display 1
-    sleep(1)
 
 try:
     camera.start_preview()
-    camera.preview_alpha = 128
-
-    # Countdown process
-    countdown()
     
     # Camera will capture 4 photos
     for x in range(1,5):
+        # Sleep 3 ish seconds - display countdown, or too busy?
+        sleep(1)
+        print("1..")
+        sleep(2)
+        print("2...")
         camera.capture('/home/pi/Desktop/kuwic-expo-photobooth/tmp/image%03d.jpg' % x)
         print("Captured photo " + str(x) + "!")
-        im = Image.open("tmp/image00" + str(x) + ".jpg")
-        im.show()
-        # Add display of previous image (image00(x-1))
-        # Sleep 3 ish seconds - display countdown, or too busy?
-        sleep(2)
+
 
     camera.stop_preview()
 
